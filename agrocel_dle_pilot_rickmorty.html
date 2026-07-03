@@ -1022,9 +1022,7 @@ function animate(){requestAnimationFrame(animate);const dt=Math.min(clock.getDel
   scene.traverse(o=>{if(o.userData&&o.userData.portal){if(!RM)o.rotation.z+=dt*0.25;o.material.opacity=0.8+0.12*Math.sin(performance.now()*0.0015);}});
   if(!RM){const _pt=performance.now()*0.001;for(let i=0;i<pulseRings.length;i++){const _o=pulseRings[i],_p=_o.userData.pr;_o.rotation.z+=dt*0.6*(_o.userData.algae?1.6:1.0);const _k=0.5+0.5*Math.sin(_pt*_p.spd+_p.phase);_o.material.opacity=_p.base*(0.5+0.5*_k)*(_o.userData.algae?(0.5+0.7*algaeBloom):1);}}
   /* RM Task 5: living-liquid roil — subtle bob + emissive breathing so goo reads as living tissue */
-  if(!RM){const _lt=performance.now()*0.001;scene.traverse(function(o){ if(o.userData&&o.userData.living){
-    const ph=o.userData.livPhase||0; o.position.y=(o.userData.livBaseY||0)+Math.sin(_lt*1.6+ph)*0.04;
-    if(o.material) o.material.emissiveIntensity=(o.userData.livBaseEI||0.5)*(0.8+0.35*Math.sin(_lt*2.1+ph)); }});}
+  /* RM: living-liquid bob + emissive breathing REMOVED entirely — columns read as "dancing". Liquids are now static (base Y, steady glow). */
   uiTick+=dt;if(changed&&uiTick>0.12){uiTick=0;refreshUI();refreshSensors();}
   {const b=performance.now()*0.004;const L=plcUnit.userData.leds;L[0].emissiveIntensity=0.45+0.55*Math.abs(Math.sin(b));L[2].emissiveIntensity=0.4+0.6*(0.5+0.5*Math.sin(b*1.7+1));
    if(plcUnit.userData.crtScan)plcUnit.userData.crtScan.position.y=0.70+0.20*(0.5+0.5*Math.sin(b*2.0));  /* RM Task 8: CRT scanline sweep */
