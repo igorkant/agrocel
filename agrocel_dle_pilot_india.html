@@ -603,7 +603,7 @@ function column(name,info){const g=new T.Group();
   const plRim=new T.Mesh(new T.TorusGeometry(0.42,0.022,10,40),_rimMat);plRim.rotation.x=Math.PI/2;plRim.position.y=0.5;g.add(plRim);
   const csh=new T.Mesh(new T.CircleGeometry(0.72,40),new T.MeshBasicMaterial({map:SHADOW_TEX,transparent:true,opacity:0.9,depthWrite:false}));
   csh.rotation.x=-Math.PI/2;csh.position.y=0.014;csh.renderOrder=0;g.add(csh);
-  const shellMat=new T.MeshStandardMaterial({color:0xe6e9ec,roughness:0.3,metalness:0.28,side:T.DoubleSide,envMapIntensity:1.15});/* india: lower rough + higher metal/env → specular edge falloff separates adjacent column barrels (critic last-10%) */
+  const shellMat=new T.MeshStandardMaterial({color:0x9aa7b0,roughness:0.32,metalness:0.35,side:T.DoubleSide,envMapIntensity:1.15});/* india: column BODY is now clear mid brushed-steel (was near-white #e6e9ec) so the whole silhouette contrasts with the ivory floor along its full height — fixes columns-merge-into-floor */
   const shell=cyl(R,R,H,48,shellMat,{open:true,ts:cs,tl:cl});shell.position.y=y0+H/2;g.add(shell);
   {const jb=new T.Mesh(new T.CylinderGeometry(R+0.006,R+0.006,0.16,48,1,true), new T.MeshStandardMaterial({map:JAALI_TEX,transparent:true,opacity:0.5,roughness:0.6,metalness:0.2,side:T.DoubleSide}));
    jb.material.map.repeat.set(6,1); jb.position.y=top-0.28; g.add(jb);}
