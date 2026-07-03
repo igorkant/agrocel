@@ -10,9 +10,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg0:#eef3f5; --panel:#ffffffcc; --stroke:#bcdedb; --stroke-soft:#d6e6e4;
-    --ink:#122c2e; --muted:#42706c; --faint:#89aaa5; --accent:#0e9e93; --accent-deep:#0b7d75;
-    --cyan:#159c96; --lime:#3fae9c; --teal:#12a894;
+    --bg0:#eef3f5; --panel:#ffffff; --stroke:#0a0f16; --stroke-soft:#c8cdd4;
+    --ink:#0a0f16; --muted:#34414d; --faint:#6b7580; --accent:#1f6feb; --accent-deep:#0a4bd4;
+    --cyan:#0a0f16; --lime:#3fae9c; --teal:#12a894;
     --brine:#1fa8c0; --wash:#46e3de; --acid:#ff9b3d; --coral:#ff6f61; --algae:#ff8a7a;
     --eluate:#ffe14a; --sulfate:#aeb9c6; --waste:#7fb0a0;
     --mono:"SF Mono",ui-monospace,"JetBrains Mono","Cascadia Mono",Consolas,monospace;
@@ -29,16 +29,16 @@
   *::-webkit-scrollbar-thumb:hover{background:#2f7250;background-clip:content-box}
   #app{position:fixed;inset:0}
   canvas{display:block;touch-action:none}
-  .panel{touch-action:none;position:relative;background:linear-gradient(158deg,rgba(255,255,255,.86) 0%,rgba(236,243,245,.78) 100%);backdrop-filter:blur(16px) saturate(1.15);-webkit-backdrop-filter:blur(16px) saturate(1.15);border:1px solid rgba(14,158,147,.28);border-radius:6px;box-shadow:inset 0 1px 0 rgba(255,255,255,.75),0 12px 40px -18px rgba(20,45,48,.5),0 2px 10px -4px rgba(20,45,48,.2);transition:box-shadow .25s ease,border-color .25s ease}
-  .panel::before,.panel::after{content:"";position:absolute;width:13px;height:13px;pointer-events:none;z-index:2}
-  .panel::before{top:-1px;left:-1px;border-top:2px solid var(--accent);border-left:2px solid var(--accent)}
-  .panel::after{bottom:-1px;right:-1px;border-bottom:2px solid var(--cyan);border-right:2px solid var(--cyan)}
-  .panel:hover{border-color:rgba(22,194,180,.56);box-shadow:0 0 32px -6px rgba(22,194,180,.5),0 22px 60px -22px #000f,inset 0 0 32px -8px rgba(70,227,222,.3)}
-  .eyebrow{font-family:var(--mono);font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--accent)}
+  .panel{touch-action:none;position:relative;background:#ffffff;border:3px solid #0a0f16;border-radius:4px;box-shadow:6px 6px 0 #0a0f16;transition:box-shadow .18s ease,transform .18s ease}
+  .panel::before,.panel::after{content:"";position:absolute;width:15px;height:15px;pointer-events:none;z-index:2}
+  .panel::before{top:3px;left:3px;border-top:3px solid var(--accent);border-left:3px solid var(--accent)}
+  .panel::after{bottom:3px;right:3px;border-bottom:3px solid #0a0f16;border-right:3px solid #0a0f16}
+  .panel:hover{transform:translate(-1px,-1px);box-shadow:8px 8px 0 var(--accent)}
+  .eyebrow{font-family:var(--mono);font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);font-weight:700}
 
   #brand{position:absolute;top:16px;left:16px;padding:13px 16px;max-width:min(48vw,372px);z-index:5}
-  #brand h1{margin:.18em 0 .12em;font-family:var(--display);font-size:19px;font-weight:700;letter-spacing:.005em;line-height:1.12;background:linear-gradient(180deg,#0e9e93 0%,#0b6f68 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;filter:none}
-  #brandLogo{display:block;width:188px;max-width:54vw;height:auto;background:#eef1ef;border-radius:4px;padding:8px 12px;margin:2px 0 10px;border:1px solid rgba(22,194,180,.42);box-shadow:0 0 16px -4px rgba(22,194,180,.42),0 1px 7px rgba(0,0,0,.4)}
+  #brand h1{margin:.18em 0 .12em;font-family:var(--display);font-size:19px;font-weight:700;letter-spacing:.005em;line-height:1.12;color:#0a0f16;filter:none}
+  #brandLogo{display:block;width:188px;max-width:54vw;height:auto;background:#ffffff;border-radius:3px;padding:8px 12px;margin:2px 0 10px;border:2px solid #0a0f16;box-shadow:3px 3px 0 #0a0f16}
   #brand .sub{font-size:11.5px;color:var(--muted);line-height:1.45}
 
   #hmi{position:absolute;left:16px;top:120px;width:min(48vw,308px);padding:13px 14px;z-index:5}
@@ -51,43 +51,43 @@
   #stats{position:absolute;left:16px;bottom:80px;width:min(48vw,308px);padding:12px 14px;z-index:5}
   #stats h3{margin:0 0 9px;font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);font-weight:600}
   #stats .grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
-  #stats .cell{background:linear-gradient(180deg,#0a1820cc 0%,#060f15cc 100%);border:1px solid var(--stroke-soft);border-radius:4px;padding:8px 10px;transition:.18s}
-  #stats .cell:hover{border-color:var(--accent);transform:translateY(-1px);box-shadow:0 0 16px -8px var(--accent),inset 0 0 12px -9px var(--cyan)}
-  #stats .num{font-family:var(--mono);font-size:16px;font-weight:700;letter-spacing:-.01em;color:#dffaff}
-  #stats .lab{font-size:10px;color:var(--faint);margin-top:1px;line-height:1.25}
+  #stats .cell{background:#ffffff;border:2px solid #0a0f16;border-radius:3px;padding:8px 10px;box-shadow:2px 2px 0 #0a0f16;transition:.16s}
+  #stats .cell:hover{transform:translate(-1px,-1px);box-shadow:3px 3px 0 var(--accent)}
+  #stats .num{font-family:var(--mono);font-size:16px;font-weight:700;letter-spacing:-.01em;color:#0a0f16}
+  #stats .lab{font-size:10px;color:var(--muted);margin-top:1px;line-height:1.25}
   #stats .wide{grid-column:1/3;display:flex;align-items:center;gap:9px}
   #stats .arrow{font-family:var(--mono);color:var(--accent);font-size:13px}
 
   #modebar{position:absolute;left:50%;bottom:18px;transform:translateX(-50%);z-index:6;display:flex;gap:6px;padding:7px;align-items:center;flex-wrap:wrap;justify-content:center;max-width:96vw}
-  .mbtn{appearance:none;border:1px solid rgba(22,194,180,.28);background:linear-gradient(180deg,#0a1c16cc,#06120ecc);color:var(--muted);font-family:var(--mono);font-size:11.5px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;padding:9px 14px;border-radius:4px;cursor:pointer;display:flex;align-items:center;gap:7px;transition:transform .18s cubic-bezier(.4,0,.2,1),color .18s,border-color .18s,box-shadow .18s,background .18s}
-  .mbtn:hover{color:var(--ink);border-color:var(--accent);transform:translateY(-1px);box-shadow:0 0 16px -3px var(--accent),inset 0 0 14px -9px var(--accent)}
-  .mbtn:active{transform:translateY(0)}
-  .mbtn .dot{width:8px;height:8px;border-radius:50%;background:currentColor;box-shadow:0 0 11px currentColor}
-  .mbtn[data-on="1"]{color:#02110b;border-color:transparent;box-shadow:0 0 20px -3px currentColor,inset 0 1px 0 #ffffff55}
-  .mbtn[data-on="1"] .dot{background:#02110b;box-shadow:none}
-  .sep{width:1px;height:26px;background:var(--stroke);margin:0 4px}
-  .ibtn{appearance:none;border:1px solid rgba(70,227,222,.25);background:linear-gradient(180deg,#0a1820cc,#06121acc);color:var(--muted);height:38px;min-width:38px;padding:0 9px;border-radius:4px;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;transition:transform .18s cubic-bezier(.4,0,.2,1),color .18s,border-color .18s,box-shadow .18s}
-  .ibtn:hover{color:var(--ink);border-color:var(--cyan);transform:translateY(-1px);box-shadow:0 0 16px -3px var(--cyan)}
-  .ibtn:active{transform:translateY(0)}
+  .mbtn{appearance:none;border:2px solid #0a0f16;background:#ffffff;color:#0a0f16;font-family:var(--mono);font-size:11.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:9px 14px;border-radius:3px;cursor:pointer;display:flex;align-items:center;gap:7px;box-shadow:3px 3px 0 #0a0f16;transition:transform .14s cubic-bezier(.4,0,.2,1),color .14s,background .14s,box-shadow .14s}
+  .mbtn:hover{transform:translate(-1px,-1px);box-shadow:4px 4px 0 var(--accent)}
+  .mbtn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 #0a0f16}
+  .mbtn .dot{width:8px;height:8px;border-radius:50%;background:currentColor;border:1.5px solid #0a0f16}
+  .mbtn[data-on="1"]{color:#ffffff!important;background:var(--accent);border-color:#0a0f16;box-shadow:3px 3px 0 #0a0f16}
+  .mbtn[data-on="1"] .dot{background:#ffffff;border-color:#ffffff}
+  .sep{width:2px;height:26px;background:#0a0f16;margin:0 4px}
+  .ibtn{appearance:none;border:2px solid #0a0f16;background:#ffffff;color:#0a0f16;height:38px;min-width:38px;padding:0 9px;border-radius:3px;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;box-shadow:3px 3px 0 #0a0f16;transition:transform .14s cubic-bezier(.4,0,.2,1),color .14s,background .14s,box-shadow .14s}
+  .ibtn:hover{transform:translate(-1px,-1px);box-shadow:4px 4px 0 var(--accent)}
+  .ibtn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 #0a0f16}
   #mbDrag{cursor:move;touch-action:none;font-size:16px;letter-spacing:-2px}
-  .ibtn[data-on="1"]{color:var(--accent);border-color:var(--accent);box-shadow:0 0 16px -3px var(--accent)}
+  .ibtn[data-on="1"]{color:#ffffff;background:var(--accent);border-color:#0a0f16;box-shadow:3px 3px 0 #0a0f16}
 
   #legend{position:absolute;top:16px;right:16px;width:244px;padding:12px 13px;z-index:5}
   #legend h3{margin:0 0 9px;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);font-weight:600}
   .lrow{display:flex;align-items:center;gap:9px;font-size:11.5px;padding:3px 0}
-  .lrow .sw{width:22px;height:6px;border-radius:3px;flex:none;box-shadow:0 0 8px -1px currentColor}
+  .lrow .sw{width:22px;height:8px;border-radius:2px;flex:none;border:1.5px solid #0a0f16}
   .lrow .lt{color:var(--ink)} .lrow .ld{color:var(--faint);margin-left:auto;font-family:var(--mono);font-size:10px}
   table{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:10px}
   th,td{text-align:right;padding:3px 4px;color:var(--muted)}
   th:first-child,td:first-child{text-align:left}
   thead th{color:var(--faint);font-weight:500;border-bottom:1px solid var(--stroke-soft)}
-  tr.cur{background:#1a2a33}
+  tr.cur{background:#e6ecf6;box-shadow:inset 3px 0 0 var(--accent)}
   td.prod{color:var(--eluate)} td.waste{color:var(--waste)}
 
   #info{position:absolute;right:16px;bottom:16px;width:min(86vw,330px);padding:0;z-index:7;opacity:0;transform:translateY(8px);pointer-events:none;transition:.2s;overflow:hidden}
   #info.show{opacity:1;transform:none;pointer-events:auto}
-  #info .ihead{padding:13px 15px 11px;border-bottom:1px solid var(--stroke-soft);display:flex;align-items:flex-start;gap:10px;background:linear-gradient(180deg,rgba(14,158,147,.1) 0%,transparent 100%)}
-  #info .tag{width:11px;height:11px;border-radius:3px;margin-top:3px;flex:none;box-shadow:0 0 10px currentColor}
+  #info .ihead{padding:13px 15px 11px;border-bottom:2px solid #0a0f16;display:flex;align-items:flex-start;gap:10px;background:#f2f4f7}
+  #info .tag{width:12px;height:12px;border-radius:2px;margin-top:3px;flex:none;border:1.5px solid #0a0f16}
   #info .ititle{font-size:14.5px;font-weight:650;line-height:1.2}
   #info .icode{font-family:var(--mono);font-size:10.5px;color:var(--muted);margin-top:2px}
   #info .ibody{padding:11px 15px 14px;font-size:12px;line-height:1.55;color:var(--muted)}
@@ -95,8 +95,8 @@
   #info .x{margin-left:auto;cursor:pointer;color:var(--faint);font-size:18px;line-height:1;padding:0 2px}
   #info .x:hover{color:var(--ink)}
 
-  #tip{position:fixed;z-index:9;pointer-events:none;background:#0a131accc;border:1px solid var(--accent);border-radius:8px;padding:5px 9px;font-size:11.5px;font-weight:560;color:var(--ink);opacity:0;transform:translate(-50%,-130%);transition:opacity .12s;white-space:nowrap}
-  #tip .t2{font-family:var(--mono);font-size:9.5px;color:var(--muted);font-weight:400}
+  #tip{position:fixed;z-index:9;pointer-events:none;background:#ffffff;border:2px solid #0a0f16;border-radius:4px;padding:6px 10px;font-size:11.5px;font-weight:700;color:#0a0f16;box-shadow:4px 4px 0 #0a0f16;opacity:0;transform:translate(-50%,-130%);transition:opacity .12s;white-space:nowrap}
+  #tip .t2{font-family:var(--mono);font-size:9.5px;color:#243040;font-weight:600}
 
   #hint{position:absolute;left:50%;top:14px;transform:translateX(-50%);z-index:4;font-size:11px;color:var(--faint);font-family:var(--mono);letter-spacing:.04em;pointer-events:none;text-align:center}
   @media (max-width:820px){ #hint,#legend{display:none} #brand{max-width:62vw} #stats{display:none} }
@@ -216,6 +216,35 @@
 (function(){
 "use strict";
 const T=THREE;
+// __SR_toon: 2/3-band toon gradient + material-class override (cel look)
+var __SR_MECHA_BASE='#2d4a73';   // deeper saturated mecha steel-blue (tints low-saturation greys)
+function __SR_makeToonGradient(bands){
+  const d=new Uint8Array(bands);
+  for(let i=0;i<bands;i++) d[i]=Math.round((0.10 + 0.8200*(i/(bands-1)))*255);  // cel-hardening: darker shadow floor 0.10 + brighter top 0.92 -> crisper terminator
+  const tx=new THREE.DataTexture(d,bands,1,THREE.LuminanceFormat);
+  tx.minFilter=THREE.NearestFilter; tx.magFilter=THREE.NearestFilter; tx.generateMipmaps=false; tx.needsUpdate=true;
+  return tx;
+}
+window.__SR_grad=__SR_makeToonGradient(3);
+(function(){
+  const KEEP=['color','map','emissive','emissiveMap','emissiveIntensity','flatShading','transparent','opacity','side','wireframe','depthWrite','depthTest','alphaTest','name','vertexColors','toneMapped'];
+  function toonify(Orig){ return function(params){ params=params||{}; const p={}; for(const k of KEEP) if(k in params) p[k]=params[k];
+    // Fix 5c: tint ONLY low-CHROMA (grey/steel/near-white) diffuse to the mecha base so
+    // toon shading bands with colour. NOTE HSL saturation is high for near-whites
+    // (0xe8f6ff -> s~1.0), so it fails to catch the pale shells; use RGB chroma instead.
+    // Keep near-black dark accents (L<=lo) as contrast, and leave saturated identity
+    // colours (streams, guards, screens, liquids, glass) alone (high chroma). Diffuse
+    // only — emissive untouched; textured (map) materials skipped.
+    if(p.color!==undefined && !p.map){ try{ var _c=new THREE.Color(p.color);
+        var _mx=Math.max(_c.r,_c.g,_c.b), _mn=Math.min(_c.r,_c.g,_c.b), _chroma=_mx-_mn, _L=(_mx+_mn)/2;
+        if(_chroma < 0.46 && _L > 0.18) p.color=new THREE.Color(__SR_MECHA_BASE); }catch(e){} }
+    // Fix #2: opaque cel materials MUST write depth, else they render without occluding
+    // and read as ghosted/see-through (221 mats inherited depthWrite:false from the
+    // originally-transparent shells/strata/liquids via KEEP). Force it on.
+    p.gradientMap=window.__SR_grad; p.transparent=false; p.opacity=1; p.depthWrite=true; p.depthTest=true; return new THREE.MeshToonMaterial(p); }; }
+  T.MeshStandardMaterial=toonify(THREE.MeshStandardMaterial);
+  T.MeshPhysicalMaterial=toonify(THREE.MeshPhysicalMaterial);
+})();
 const RM=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
 const C={brine:0x1fa8c0,wash:0x46e3de,acid:0xff9b3d,eluate:0xffe14a,sulfate:0xaeb9c6,waste:0x7fb0a0,
   accent:0x16c2b4,accentDeep:0x0e8c86,steel:0x8fb0cc,steelD:0x4a5e72,dark:0x141c24,pipe:0x9fd0e6};
@@ -226,7 +255,7 @@ const camera=new T.PerspectiveCamera(45,innerWidth/innerHeight,0.1,600);
 const renderer=new T.WebGLRenderer({antialias:true});
 renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.setSize(innerWidth,innerHeight);
 renderer.shadowMap.enabled=true;renderer.shadowMap.type=T.PCFSoftShadowMap;
-renderer.outputEncoding=T.sRGBEncoding;renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=1.0;
+renderer.outputEncoding=T.sRGBEncoding;renderer.toneMapping=T.NoToneMapping;renderer.toneMappingExposure=1.0;  /* cel-hardening: ACES lifted shadows + desaturated -> pale toon; NoToneMapping keeps bands crisp & colours saturated */
 app.appendChild(renderer.domElement);
 
 /* ---------- post-processing: bloom + FXAA + cinematic grade ----------
@@ -343,6 +372,11 @@ function liq(hex,op){return new T.MeshStandardMaterial({color:hex,transparent:tr
 const NEON=new T.MeshBasicMaterial({color:0x16c2b4});
 const NEONc=new T.MeshBasicMaterial({color:0x46e3de});
 const NEONa=new T.MeshBasicMaterial({color:0xff9b3d});
+/* Tank cel-fix (user: retint rings to cel palette + deepen shell): the tank NEON rings read as
+   pale-cyan frosted glass and washed the shell. Ink bands = manga outline on the tank; deeper
+   shell resists the stacked-light wash. Scoped to tank() only — global NEON/M.steelM untouched. */
+const M_tankRing=new T.MeshBasicMaterial({color:0x0a0f16});
+const M_tankShell=M.steelM.clone();M_tankShell.color.setHex(0x1a2d4a);  /* deeper so the lit toon band still reads steel-blue, not pale */
 const pulseRings=[];let algaeBloom=0.55;
 
 /* ---- co-branding nameplate (XtraLit + Agrocel) for tank shells ----
@@ -393,12 +427,11 @@ function label(text,opts){opts=opts||{};const lines=Array.isArray(text)?text:[te
   const SS=2.5,MG=24;w=Math.ceil(w)+padX*2;const h=padY*2+fs+(lines[1]?(gap+sub):0);cv.width=Math.ceil((w+MG*2)*SS);cv.height=Math.ceil((h+MG*2)*SS);ctx.setTransform(SS,0,0,SS,MG*SS,MG*SS);
   const ac=opts.border||'#0b7d75',nx=15;
   ctx.beginPath();ctx.moveTo(nx,0);ctx.lineTo(w,0);ctx.lineTo(w,h-nx);ctx.lineTo(w-nx,h);ctx.lineTo(0,h);ctx.lineTo(0,nx);ctx.closePath();
-  const cg=ctx.createLinearGradient(0,0,0,h);cg.addColorStop(0,'#ffffff');cg.addColorStop(1,'#e8eff1');
-  ctx.save();ctx.shadowColor='rgba(10,24,26,0.55)';ctx.shadowBlur=17;ctx.shadowOffsetY=8;ctx.fillStyle=opts.bg||cg;ctx.fill();ctx.restore();
-  ctx.strokeStyle=ac;ctx.lineWidth=2.5;ctx.stroke();
+  ctx.save();ctx.shadowColor='#0a0f16';ctx.shadowBlur=0;ctx.shadowOffsetX=5;ctx.shadowOffsetY=6;ctx.fillStyle=opts.bg||'#ffffff';ctx.fill();ctx.restore();
+  ctx.strokeStyle='#0a0f16';ctx.lineWidth=4;ctx.stroke();
   ctx.fillStyle=ac;ctx.fillRect(0,nx,3.5,h-nx*2);ctx.fillRect(w-nx,h-3.5,nx,3.5);
-  ctx.textAlign='center';ctx.textBaseline='top';ctx.font=f0;ctx.fillStyle=opts.color||'#081618';ctx.fillText(lines[0],w/2+1,padY);
-  if(lines[1]){ctx.font=f1;ctx.fillStyle=opts.subcolor||'#0d3b37';ctx.fillText(lines[1],w/2+1,padY+fs+gap);}
+  ctx.textAlign='center';ctx.textBaseline='top';ctx.font=f0;ctx.fillStyle=opts.color||'#0a0f16';ctx.fillText(lines[0],w/2+1,padY);
+  if(lines[1]){ctx.font=f1;ctx.fillStyle=opts.subcolor||'#0a0f16';ctx.fillText(lines[1],w/2+1,padY+fs+gap);}
   const tex=new T.CanvasTexture(cv);tex.anisotropy=8;
   const sp=new T.Sprite(new T.SpriteMaterial({map:tex,transparent:true,depthTest:false,depthWrite:false}));sp.renderOrder=999;
   const sc=(opts.scale||1)*0.0125;sp.scale.set((w+MG*2)*sc,(h+MG*2)*sc,1);sp.center.set(0.5,0);return sp;}
@@ -410,25 +443,23 @@ function colLabel(name){const cv=document.createElement('canvas'),ctx=cv.getCont
     const SS=2.5,MG=24;w=Math.ceil(w)+padX*2;const h=padY*2+fs+gap+sub+(showFlow?(gap+fl):0);cv.width=Math.ceil((w+MG*2)*SS);cv.height=Math.ceil((h+MG*2)*SS);ctx.setTransform(SS,0,0,SS,MG*SS,MG*SS);
     const ac=showFlow?'#1f8fb8':'#0b7d75',nx=15;
     ctx.beginPath();ctx.moveTo(nx,0);ctx.lineTo(w,0);ctx.lineTo(w,h-nx);ctx.lineTo(w-nx,h);ctx.lineTo(0,h);ctx.lineTo(0,nx);ctx.closePath();
-    const cg=ctx.createLinearGradient(0,0,0,h);cg.addColorStop(0,'#ffffff');cg.addColorStop(1,'#e8eff1');
-    ctx.save();ctx.shadowColor='rgba(10,24,26,0.55)';ctx.shadowBlur=17;ctx.shadowOffsetY=8;ctx.fillStyle=cg;ctx.fill();ctx.restore();
-    ctx.strokeStyle=ac;ctx.lineWidth=2.5;ctx.stroke();
+    ctx.save();ctx.shadowColor='#0a0f16';ctx.shadowBlur=0;ctx.shadowOffsetX=5;ctx.shadowOffsetY=6;ctx.fillStyle='#ffffff';ctx.fill();ctx.restore();
+    ctx.strokeStyle='#0a0f16';ctx.lineWidth=4;ctx.stroke();
     ctx.fillStyle=ac;ctx.fillRect(0,nx,3.5,h-nx*2);
-    ctx.textAlign='center';ctx.textBaseline='top';ctx.font=f0;ctx.fillStyle='#081618';ctx.fillText(name,w/2+1,padY);
-    ctx.font=f1;ctx.fillStyle='#0d3b37';ctx.fillText('Radial column',w/2+1,padY+fs+gap);
-    if(showFlow){ctx.font=f2;ctx.fillStyle='#0f5f7e';ctx.fillText('8 m³/h',w/2+1,padY+fs+gap+sub+gap);}
+    ctx.textAlign='center';ctx.textBaseline='top';ctx.font=f0;ctx.fillStyle='#0a0f16';ctx.fillText(name,w/2+1,padY);
+    ctx.font=f1;ctx.fillStyle='#0a0f16';ctx.fillText('Radial column',w/2+1,padY+fs+gap);
+    if(showFlow){ctx.font=f2;ctx.fillStyle='#0a3548';ctx.fillText('8 m³/h',w/2+1,padY+fs+gap+sub+gap);}
     tex.needsUpdate=true;const sc=1.05*0.0125;sp.scale.set((w+MG*2)*sc,(h+MG*2)*sc,1);};
   sp.update(false);return sp;}
 function valueSprite(){const cv=document.createElement('canvas');const SS=2.5;cv.width=280*SS;cv.height=88*SS;const ctx=cv.getContext('2d');const tex=new T.CanvasTexture(cv);tex.anisotropy=8;
   const sp=new T.Sprite(new T.SpriteMaterial({map:tex,transparent:true,depthTest:false,depthWrite:false}));sp.renderOrder=999;sp.scale.set(1.9,0.6,1);sp.center.set(0.5,0);sp.visible=false;
   sp.setVal=(top,val,hex)=>{ctx.setTransform(SS,0,0,SS,0,0);ctx.clearRect(0,0,280,88);const w=280,h=88,nx=14;
     ctx.beginPath();ctx.moveTo(nx,0);ctx.lineTo(w,0);ctx.lineTo(w,h-nx);ctx.lineTo(w-nx,h);ctx.lineTo(0,h);ctx.lineTo(0,nx);ctx.closePath();
-    const cg=ctx.createLinearGradient(0,0,0,h);cg.addColorStop(0,'#ffffff');cg.addColorStop(1,'#e8eff1');
-    ctx.fillStyle=cg;ctx.fill();
-    ctx.strokeStyle=hex;ctx.lineWidth=2.5;ctx.stroke();
+    ctx.save();ctx.shadowColor='#0a0f16';ctx.shadowBlur=0;ctx.shadowOffsetX=5;ctx.shadowOffsetY=6;ctx.fillStyle='#ffffff';ctx.fill();ctx.restore();
+    ctx.strokeStyle='#0a0f16';ctx.lineWidth=4;ctx.stroke();
     ctx.fillStyle=hex;ctx.fillRect(0,nx,4,h-nx*2);
-    ctx.textAlign='center';ctx.fillStyle='#0d3b37';ctx.font='700 24px ui-monospace,monospace';ctx.textBaseline='middle';ctx.fillText(top,144,24);
-    ctx.fillStyle='#081618';ctx.font='700 34px ui-monospace,monospace';ctx.fillText(val,144,58);tex.needsUpdate=true;};return sp;}
+    ctx.textAlign='center';ctx.fillStyle='#0a0f16';ctx.font='700 24px ui-monospace,monospace';ctx.textBaseline='middle';ctx.fillText(top,144,24);
+    ctx.fillStyle='#0a0f16';ctx.font='700 34px ui-monospace,monospace';ctx.fillText(val,144,58);tex.needsUpdate=true;};return sp;}
 function hx(n){return '#'+n.toString(16).padStart(6,'0');}
 
 function cyl(rt,rb,h,seg,mat,o){const g=new T.CylinderGeometry(rt,rb,h,seg||28,1,(o&&o.open)||false,(o&&o.ts)||0,(o&&o.tl)||Math.PI*2);const m=new T.Mesh(g,mat);m.castShadow=true;m.receiveShadow=true;return m;}
@@ -445,7 +476,7 @@ const pipes=[];
 function makePipe(kind,raw,opts){opts=opts||{};
   let P=raw.map(p=>new T.Vector3(p[0],p[1],p[2]));P=P.filter((p,i)=>i===0||p.distanceTo(P[i-1])>1e-4);
   if(P.length<2)return;const r=opts.r||0.07;
-  const pmat=M.pipe.clone();pmat.depthWrite=false;const grp=rigidPipe(P,r,pmat);scene.add(grp);
+  const pmat=M.pipe.clone();pmat.depthWrite=true;const grp=rigidPipe(P,r,pmat);scene.add(grp);  /* Fix #2: opaque cel pipes occlude (was false for the transparent flow-reveal) */
   const len=plen(P);
   // the liquid core follows the SAME rigid polyline as the pipe — straight segments + filled elbows, never a smoothed hose
   const path=new T.CurvePath();for(let i=0;i<P.length-1;i++)path.add(new T.LineCurve3(P[i],P[i+1]));
@@ -458,12 +489,16 @@ function makePipe(kind,raw,opts){opts=opts||{};
   pipes.push({kind,grp,metal:grp.children.map(c=>c.material),core:coreG,cmat:coreMat});}
 
 function tank(r,h,liquidHex,labelLines,info,opts){opts=opts||{};const g=new T.Group();
-  const body=cyl(r,r,h,40,M.steelM);body.position.y=h/2+0.9;g.add(body);
-  const dome=new T.Mesh(new T.SphereGeometry(r,40,20,0,Math.PI*2,0,Math.PI*0.5),M.steelM);dome.position.y=h+0.9;dome.castShadow=true;g.add(dome);
-  const bot=new T.Mesh(new T.SphereGeometry(r,40,20,0,Math.PI*2,Math.PI*0.5,Math.PI*0.5),M.steelM);bot.position.y=0.9;g.add(bot);
-  const lh=h*0.66;const lqd=cyl(r*0.94,r*0.94,lh,40,liq(liquidHex,0.55));lqd.position.y=lh/2+0.95;g.add(lqd);
-  for(let i=1;i<3;i++){const b=cyl(r*1.02,r*1.02,0.05,40,NEONc);b.position.y=0.9+h*i/3;g.add(b);}
-  {const baseRing=new T.Mesh(new T.TorusGeometry(r*1.06,0.04,10,56),NEON);baseRing.rotation.x=Math.PI/2;baseRing.position.y=0.95;g.add(baseRing);
+  const body=cyl(r,r,h,40,M_tankShell);body.position.y=h/2+0.9;g.add(body);
+  const dome=new T.Mesh(new T.SphereGeometry(r,40,20,0,Math.PI*2,0,Math.PI*0.5),M_tankShell);dome.position.y=h+0.9;dome.castShadow=true;g.add(dome);
+  const bot=new T.Mesh(new T.SphereGeometry(r,40,20,0,Math.PI*2,Math.PI*0.5,Math.PI*0.5),M_tankShell);bot.position.y=0.9;g.add(bot);
+  // Tank cel-fix: internal emissive liquid rendered THROUGH the (opaque) shell → read as glass,
+  // which the anime target forbids. Kept in the group but hidden (visible=false) so tanks are solid
+  // hero forms while child_count/topology invariant is preserved. Identity still carried by labels
+  // + DOM legend + coloured stream pipes.
+  const lh=h*0.66;const lqd=cyl(r*0.94,r*0.94,lh,40,liq(liquidHex,0.55));lqd.position.y=lh/2+0.95;lqd.visible=false;g.add(lqd);
+  for(let i=1;i<3;i++){const b=cyl(r*1.02,r*1.02,0.05,40,M_tankRing);b.position.y=0.9+h*i/3;g.add(b);}
+  {const baseRing=new T.Mesh(new T.TorusGeometry(r*1.06,0.04,10,56),M_tankRing);baseRing.rotation.x=Math.PI/2;baseRing.position.y=0.95;g.add(baseRing);
    const haloMat=new T.MeshBasicMaterial({color:0x16c2b4,transparent:true,opacity:0.32,side:T.DoubleSide});const halo=new T.Mesh(new T.RingGeometry(r*1.1,r*1.55,56),haloMat);halo.rotation.x=-Math.PI/2;halo.position.y=0.93;halo.userData.pr={base:0.34,spd:1.9,phase:r*1.7,smin:0.95,smax:1.07};pulseRings.push(halo);g.add(halo);}
   for(let a=0;a<4;a++){const ang=a*Math.PI/2+Math.PI/4;const lg=box(0.15,0.9,0.15,M.dark);lg.position.set(Math.cos(ang)*r*0.82,0.45,Math.sin(ang)*r*0.82);g.add(lg);}
   const na=opts.nozAngle!==undefined?opts.nozAngle:0;
@@ -497,6 +532,7 @@ function pump(info,sc){const g=new T.Group();
   const sucF=flange(0.16,M.dark);sucF.rotation.x=Math.PI/2;sucF.position.set(0.4,0.52,0.46);g.add(sucF);
   const dis=cyl(0.1,0.1,0.38,14,M.steel);dis.position.set(0.4,0.86,0);g.add(dis);
   const disF=flange(0.15,M.dark);disF.position.set(0.4,1.05,0);g.add(disF);
+  g.userData.__noOutline=true;  /* Fix #3: pump excluded from outline scribble */
   if(sc)g.scale.setScalar(sc);selectable(g,info);return g;}
 
 function filter(info,sc){const g=new T.Group();
@@ -517,6 +553,7 @@ function instrument(kind,info,sc){const g=new T.Group();
     const needle=box(0.01,0.1,0.004,new T.MeshBasicMaterial({color:0xcc3333}));needle.position.set(0,0.34,0.01);needle.rotation.x=-Math.PI/2;needle.rotation.z=0.6;g.add(needle);
     const stem=cyl(0.04,0.04,0.16,8,M.dark);stem.position.set(0,0.18,0);g.add(stem);}
   else{const disp=box(0.24,0.18,0.05,M.display);disp.position.set(0,0.3,0.12);g.add(disp);const stem=cyl(0.04,0.04,0.14,8,M.dark);stem.position.set(0,0.18,0.06);g.add(stem);}
+  g.userData.__noOutline=true;  /* Fix #3: instrument excluded from outline scribble */
   if(sc)g.scale.setScalar(sc);selectable(g,info);return g;}
 
 function analyzer(info,sc){const g=new T.Group();
@@ -525,6 +562,7 @@ function analyzer(info,sc){const g=new T.Group();
   const probe=cyl(0.04,0.04,0.46,10,M.steelM);probe.position.y=0.3;g.add(probe);
   const head=box(0.28,0.32,0.18,M.dark);head.position.y=0.66;g.add(head);
   const disp=box(0.2,0.16,0.03,M.display);disp.position.set(0,0.68,0.1);g.add(disp);
+  g.userData.__noOutline=true;  /* Fix #3: analyzer excluded from outline scribble */
   if(sc)g.scale.setScalar(sc);selectable(g,info);return g;}
 
 function valveUnit(info,sc){const g=new T.Group();
@@ -537,6 +575,7 @@ function valveUnit(info,sc){const g=new T.Group();
   const actMat=new T.MeshStandardMaterial({color:0xffb024,emissive:0xff7a00,emissiveIntensity:0.6,metalness:0.5,roughness:0.4,envMapIntensity:0.9});
   const act=new T.Mesh(new T.BoxGeometry(0.4,0.34,0.36),actMat);act.position.y=0.56;act.castShadow=true;g.add(act);g.userData.act=act;
   const ind=cyl(0.13,0.13,0.03,16,M.white);ind.position.y=0.76;g.add(ind);
+  g.userData.__noOutline=true;  /* Fix #3: valve excluded from outline scribble */
   if(sc)g.scale.setScalar(sc);selectable(g,info);return g;}
 
 /* radial-flow column (~20 L), flat top, quarter cutaway.
@@ -603,7 +642,7 @@ function plc(info){const g=new T.Group();
   g.traverse(o=>{if(o.isMesh)o.castShadow=true;});selectable(g,info);return g;}
 
 function human(info){const g=new T.Group();
-  const skin=new T.MeshStandardMaterial({color:0xc98b63,roughness:0.75});
+  const skin=new T.MeshStandardMaterial({color:0xc98b63,roughness:0.75});skin.color.setHex(0xc98b63);  /* undo the mecha-blue cel tint: skin chroma 0.40 fell under the __SR_toon tint gate (<0.46) -> keep human skin tone */
   const suit=new T.MeshStandardMaterial({color:0x2f6fb0,roughness:0.7});
   const hat=new T.MeshStandardMaterial({color:0xf2c12e,roughness:0.5});
   const boot=new T.MeshStandardMaterial({color:0x202327,roughness:0.85});
@@ -637,7 +676,7 @@ COLX.forEach((x,i)=>{const n=i+1;
   const pm=instrument('P',{color:C.brine,title:'Pressure meter PT'+n,code:'inlet pressure',body:'<b>Pressure meter (PT)</b> on column '+n+'’s inlet. Bed ΔP ≈ <b>12–16 kPa</b>. If the pressure rises above the set-point, it signals the PLC to trigger <b>automatic filter cleaning (backwash)</b>.'},0.85);
   pm.position.set(x,0.7,-2.1);scene.add(pm);
 
-  const ec=analyzer({color:C.wash,title:'EC-meter EC'+n,code:'conductivity · УЭП',body:'Outlet <b>conductivity (EC) meter</b>. Controls the <b>water wash</b> after sorption — washing continues until the conductivity drops to set-point, clearing residual salts so they are not carried over into the eluate.'},0.85);
+  const ec=analyzer({color:C.wash,title:'EC-meter EC'+n,code:'conductivity',body:'Outlet <b>conductivity (EC) meter</b>. Controls the <b>water wash</b> after sorption — washing continues until the conductivity drops to set-point, clearing residual salts so they are not carried over into the eluate.'},0.85);
   ec.position.set(x,0.35,0.9);scene.add(ec);
   const ecv=valueSprite();ecv.position.set(x,0.95,0.9);labelGroup.add(ecv);ecS.push(ecv);
   const tv=valveUnit({color:C.brine,title:'Top Changeover Valve TV'+n,code:'feed ↔ eluate',body:'<b>Top changeover valve</b> on column '+n+'’s single top nozzle. Selects the path:<br>• Sorption / washes → <b>feed line → column</b> (down)<br>• Desorption → <b>column → eluate line</b> (up).<br>Actuator colour shows the open path.'},0.6);
@@ -674,7 +713,7 @@ operator.position.set(-1.0,0,2.9);operator.rotation.y=Math.PI;operator.scale.set
 
 const plcUnit=plc({color:C.accent,title:'PLC Control Cabinet',code:'autonomous operation',body:'The pilot runs <b>autonomously</b> under a <b>PLC controller</b>: it sequences sorption → water wash → desorption, actuates the TV / BV / FV / DV valves, paces the pumps to 8 m³/h per column and holds the EC set-point. ≈ 8 full cycles per day, &gt;1 kg Li₂CO₃ per hour.'});
 plcUnit.position.set(5.5,0,3.4);scene.add(plcUnit);
-const colLabels=cols.map((c,i)=>addLabel(colLabel('C'+(i+1)),c.position.x,c.position.y+c.userData.lbl[1],c.position.z));
+const colLabels=cols.map((c,i)=>addLabel(colLabel('C'+(i+1)),c.position.x,c.position.y+c.userData.lbl[1]+(i%2?1.7:0),c.position.z));
 [pondG,freshT,acidT,eluateT,spentT,plcUnit].forEach(o=>{const L=o.userData.lbl;if(!L)return;
   addLabel(label(L[0],{scale:1.05,fs:42,subfs:31,border:hx(L[2])}),o.position.x,o.position.y+L[1],o.position.z);});
 
@@ -858,7 +897,7 @@ function animate(){requestAnimationFrame(animate);const dt=Math.min(clock.getDel
   if(state.cycle){state.cycT+=dt;const step=state.mode==='desorb'?16:8;if(state.cycT>step){state.cycT=0;setMode(ORDER[(ORDER.indexOf(state.mode)+1)%3]);}}
   let changed=false;sens.forEach(s=>{const ec=s.ec+(s.ecT-s.ec)*Math.min(1,dt*0.45);if(Math.abs(ec-s.ec)>0.01)changed=true;s.ec=ec;if(state.mode==='wash'&&s.ec<3.2)s.ec=205;});
   for(const p of pipes){const on=pipeActive(p);
-    for(const mm of p.metal){mm.color.lerp(tmpC.setHex(on?0xcdd9e2:0x9aa7b3),0.2);mm.opacity+=((on?0.06:0.9)-mm.opacity)*0.2;mm.depthWrite=!on;}
+    for(const mm of p.metal){mm.color.lerp(tmpC.setHex(on?0xcdd9e2:0x9aa7b3),0.2);}  /* Fix #2: dropped runtime opacity/depthWrite toggle — cel casings stay opaque & depth-writing */
     if(!on){p.core.visible=false;continue;}
     const col=tmpC.setHex(pipeColor(p));p.core.visible=true;p.cmat.color.lerp(col,0.25);p.cmat.emissive.lerp(col,0.25);
     const slow=(state.mode==='desorb');
@@ -879,6 +918,103 @@ function resize(){camera.aspect=innerWidth/innerHeight;camera.updateProjectionMa
   if(bloomPass)bloomPass.setSize(innerWidth,innerHeight);
   if(fxaaPass)fxaaPass.material.uniforms.resolution.value.set(1/(innerWidth*pr),1/(innerHeight*pr));}
 addEventListener('resize',resize);
+/* __SR_cel: depth/normal outline post-pass + rim light + dark cel background (Task 4) */
+(function(){
+  // dark cel background (vertical top->bottom gradient) + drop the atmospheric haze fog
+  try{
+    var _bgc=document.createElement('canvas');_bgc.width=2;_bgc.height=256;
+    var _bx=_bgc.getContext('2d');var _bgg=_bx.createLinearGradient(0,0,0,256);
+    _bgg.addColorStop(0,'#213a6b');_bgg.addColorStop(1,'#0b1526');
+    _bx.fillStyle=_bgg;_bx.fillRect(0,0,2,256);
+    var _bgTex=new T.CanvasTexture(_bgc);_bgTex.needsUpdate=true;
+    scene.background=_bgTex; scene.fog=null;
+  }catch(e){}
+  // Cel-hardening (global): MeshToon picks a band by each directional light's NdotL, so MANY
+  // fill/rim lights impose competing terminators that average into a SMOOTH gradient, and
+  // ambient/hemi add un-quantised flat light that lifts the dark band -> washed, no terminator.
+  // Fix = keep ONE dominant KEY (the only castShadow light) to define a single crisp terminator,
+  // crush the extra directionals to near-zero, and crush ambient/hemi. No extra cel rim.
+  try{ scene.traverse(function(o){ if(o.isLight){
+        if(o.isAmbientLight||o.isHemisphereLight) o.intensity *= 0.08;  /* crush hard: flat white ambient/hemi DESATURATES the dark toon shell to pale gray -> keep it minimal */
+        else if(o.castShadow) o.intensity *= 0.42;   // KEY — defines the cel terminator; 1.55 was too hot for the non-ACES pipeline (colours are interpreted LINEAR in r128, so a hot key over-brightens dark hexes to pale). 0.35->0.42 = key ~0.65: lifts equipment out of murk while keeping a crisp dark side
+        else o.intensity *= 0.10;                    // extra fill/rim/point — competing bands, crush
+      } }); }catch(e){}
+  // outline post-pass — only when the composer FX chain is active
+  if(composer){
+    var _size=new T.Vector2(); renderer.getSize(_size);
+    var normalRT=new T.WebGLRenderTarget(_size.x,_size.y);
+    normalRT.depthTexture=new T.DepthTexture(_size.x,_size.y);
+    normalRT.depthTexture.type=T.UnsignedShortType;
+    var normalMat=new T.MeshNormalMaterial();
+    function __SR_renderNormals(){
+      var _hidden=[]; var _ws=new T.Vector3();
+      scene.traverse(function(o){
+        if(!o.visible) return;
+        if(o.isLine||o.isLineSegments||o.isPoints||o.isSprite){ o.visible=false; _hidden.push(o); return; }
+        // Fix #3: keep the small manifold equipment (pumps/valves/instruments/analyzers, tagged
+        // g.userData.__noOutline) out of the outline pass — their many small bodies were emitting a
+        // scribble of interior edges. Hero silhouettes (tanks/columns/PLC) stay outlined.
+        if(o.userData && o.userData.root && o.userData.root.userData.__noOutline){ o.visible=false; _hidden.push(o); return; }
+        // Priority 2 (Task 5d): keep the busy pipe-manifold OUT of the normal/depth pass so
+        // it stops emitting a scribble of thin interior outlines (equipment silhouettes stay).
+        // Prefer provenance; fall back to a world-space thin/small bounding-box test because
+        // pipe segments + elbow joints are tiny-radius cylinders/spheres (rigidPipe/makePipe).
+        if(o.isMesh){
+          var ud=o.userData;
+          if(ud && ud.__src && (ud.__src.fn==='rigidPipe'||ud.__src.fn==='makePipe')){ o.visible=false; _hidden.push(o); return; }
+          var g=o.geometry;
+          if(g){
+            if(!g.boundingBox) g.computeBoundingBox();
+            var bb=g.boundingBox; o.getWorldScale(_ws);
+            var e=[(bb.max.x-bb.min.x)*Math.abs(_ws.x),(bb.max.y-bb.min.y)*Math.abs(_ws.y),(bb.max.z-bb.min.z)*Math.abs(_ws.z)].sort(function(a,b){return a-b;});
+            if(e[1] < 0.32){ o.visible=false; _hidden.push(o); return; }   // 2nd-smallest extent tiny -> pipe-like
+          }
+        }
+      });
+      scene.overrideMaterial=normalMat; renderer.setRenderTarget(normalRT); renderer.render(scene,camera);
+      scene.overrideMaterial=null; renderer.setRenderTarget(null);
+      for(var _i=0;_i<_hidden.length;_i++) _hidden[_i].visible=true;
+    }
+    var EdgeShader={
+      uniforms:{ tDiffuse:{value:null}, tNormal:{value:null}, tDepth:{value:null},
+        resolution:{value:new T.Vector2(_size.x,_size.y)}, outlineColor:{value:new T.Color('#0a0f16')},
+        normalEdge:{value:0.7}, depthEdge:{value:3.0}, thickness:{value:3.0},  /* cel-hardening: bolder, more sensitive manga outline */
+        cameraNear:{value:camera.near}, cameraFar:{value:camera.far} },
+      vertexShader:`varying vec2 vUv; void main(){ vUv=uv; gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);} `,
+      fragmentShader:`
+        uniform sampler2D tDiffuse,tNormal,tDepth; uniform vec2 resolution; uniform vec3 outlineColor;
+        uniform float normalEdge,depthEdge,thickness,cameraNear,cameraFar; varying vec2 vUv;
+        float readDepth(vec2 uv){ float z=texture2D(tDepth,uv).x; float n=2.0*z-1.0;
+          return (2.0*cameraNear*cameraFar)/(cameraFar+cameraNear-n*(cameraFar-cameraNear)); }
+        void main(){ vec2 t=thickness/resolution;
+          vec3 nC=texture2D(tNormal,vUv).rgb;
+          vec3 nX=texture2D(tNormal,vUv+vec2(t.x,0.0)).rgb;
+          vec3 nY=texture2D(tNormal,vUv+vec2(0.0,t.y)).rgb;
+          float ne=(distance(nC,nX)+distance(nC,nY));
+          float dC=readDepth(vUv), dX=readDepth(vUv+vec2(t.x,0.0)), dY=readDepth(vUv+vec2(0.0,t.y));
+          float de=(abs(dC-dX)+abs(dC-dY));
+          float edge=step(normalEdge, ne) + step(depthEdge, de);
+          edge=clamp(edge,0.0,1.0);
+          vec4 col=texture2D(tDiffuse,vUv);
+          gl_FragColor=vec4(mix(col.rgb, outlineColor, edge), col.a);
+        }`
+    };
+    var edgePass=new T.ShaderPass(EdgeShader);
+    edgePass.renderToScreen=true;
+    if(vigPass)vigPass.renderToScreen=false;   // outline becomes the new last (to-screen) pass
+    composer.addPass(edgePass);
+    var _celRender=composer.render.bind(composer);
+    composer.render=function(){
+      __SR_renderNormals();
+      edgePass.uniforms.tNormal.value=normalRT.texture;
+      edgePass.uniforms.tDepth.value=normalRT.depthTexture;
+      var _s=new T.Vector2(); renderer.getSize(_s);                 // recompute size each call to survive resize
+      if(normalRT.width!==_s.x||normalRT.height!==_s.y) normalRT.setSize(_s.x,_s.y);
+      edgePass.uniforms.resolution.value.set(_s.x,_s.y);
+      _celRender();
+    };
+  }
+})();
 setMode('sorption');applyCam();animate();
 setTimeout(()=>el('load').classList.add('hide'),650);
 if(!RM){ctrl.theta=2.3;ctrl.tT=0.9;ctrl.radius=78;ctrl.tR=50;}
