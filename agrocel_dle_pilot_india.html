@@ -346,7 +346,7 @@ function makeJaaliTex(){const c=document.createElement('canvas');c.width=c.heigh
   const t=new T.CanvasTexture(c);t.wrapS=t.wrapT=T.RepeatWrapping;return t;}
 const JAALI_TEX=makeJaaliTex();
 function makeChakraTex(){const c=document.createElement('canvas');c.width=c.height=512;const x=c.getContext('2d');
-  x.clearRect(0,0,512,512);const cx=256,cy=256;x.strokeStyle='#000080';x.fillStyle='#000080';
+  x.clearRect(0,0,512,512);const cx=256,cy=256;x.strokeStyle='#b4bec7';x.fillStyle='#b4bec7';/* india: light steel chakra (was navy) — visible on the dark floor + dark PLC screen */
   x.lineWidth=6;x.beginPath();x.arc(cx,cy,210,0,7);x.stroke();
   x.lineWidth=4;x.beginPath();x.arc(cx,cy,196,0,7);x.stroke();
   x.beginPath();x.arc(cx,cy,26,0,7);x.fill();
@@ -411,18 +411,18 @@ drawPlate();
 const brandPlateMat=new T.MeshBasicMaterial({map:plateTex,transparent:true,depthWrite:false,side:T.FrontSide});
 
 (function(){const g=new T.Group();
-  const _fc=document.createElement('canvas');_fc.width=_fc.height=512;{const fx=_fc.getContext('2d');const fg=fx.createRadialGradient(256,256,20,256,256,250);fg.addColorStop(0,'#f0ede6');fg.addColorStop(0.55,'#e6e2d9');fg.addColorStop(1,'#cfccc2');fx.fillStyle=fg;fx.fillRect(0,0,512,512);}
+  const _fc=document.createElement('canvas');_fc.width=_fc.height=512;{const fx=_fc.getContext('2d');const fg=fx.createRadialGradient(256,256,20,256,256,250);fg.addColorStop(0,'#464c55');fg.addColorStop(0.55,'#333941');fg.addColorStop(1,'#1e2228');fx.fillStyle=fg;fx.fillRect(0,0,512,512);}/* india: DARK polished floor (was ivory) — light/steel equipment now pops against it */
   const floorTex=new T.CanvasTexture(_fc);floorTex.encoding=T.sRGBEncoding;
-  const sand=new T.Mesh(new T.PlaneGeometry(160,160),new T.MeshStandardMaterial({color:0xffffff,map:floorTex,roughness:0.42,metalness:0.06,envMapIntensity:0.25}));sand.rotation.x=-Math.PI/2;sand.receiveShadow=true;g.add(sand);
+  const sand=new T.Mesh(new T.PlaneGeometry(160,160),new T.MeshStandardMaterial({color:0xffffff,map:floorTex,roughness:0.34,metalness:0.22,envMapIntensity:0.5}));sand.rotation.x=-Math.PI/2;sand.receiveShadow=true;g.add(sand);
   const grid=new T.GridHelper(160,80,0x9aa6ab,0xbcc4c9);grid.position.y=0.015;grid.material.transparent=true;grid.material.opacity=0.12;g.add(grid);
   const grid2=new T.GridHelper(42,21,0x9aa7b0,0xc3c9ce);grid2.position.y=0.02;grid2.material.transparent=true;grid2.material.opacity=0.16;g.add(grid2);
   /* concentric energy rings on the pad */
   /* STATIC navy guilloche rings — NOT added to pulseRings, no animation */
-  for(let i=0;i<5;i++){const rr=5+i*4.6;const ring=new T.Mesh(new T.RingGeometry(rr,rr+0.09,120),new T.MeshBasicMaterial({color:IND.navy,transparent:true,opacity:0.12-i*0.012,side:T.DoubleSide}));ring.rotation.x=-Math.PI/2;ring.position.y=0.028;g.add(ring);}
+  for(let i=0;i<5;i++){const rr=5+i*4.6;const ring=new T.Mesh(new T.RingGeometry(rr,rr+0.09,120),new T.MeshBasicMaterial({color:0x9aa7b0,transparent:true,opacity:0.20-i*0.02,side:T.DoubleSide}));ring.rotation.x=-Math.PI/2;ring.position.y=0.028;g.add(ring);}/* india: light steel guilloche (was navy) — visible on the dark floor */
   /* glowing perimeter frame around the pad */
   [[0,17.05,42.4,0.14],[0,-17.05,42.4,0.14],[21.25,0,0.14,34.2],[-21.25,0,0.14,34.2]].forEach(b=>{const bar=new T.Mesh(new T.BoxGeometry(b[2],0.06,b[3]),new T.MeshBasicMaterial({color:0x9aa7b0,transparent:true,opacity:0.3}));bar.position.set(b[0],0.035,b[1]);g.add(bar);});
   /* centered Ashoka-chakra floor inlay (static, non-selectable) */
-  const chakra=new T.Mesh(new T.CircleGeometry(1.6,64), new T.MeshBasicMaterial({map:CHAKRA_TEX,transparent:true,opacity:0.5,depthWrite:false}));
+  const chakra=new T.Mesh(new T.CircleGeometry(1.6,64), new T.MeshBasicMaterial({map:CHAKRA_TEX,transparent:true,opacity:0.6,depthWrite:false}));
   chakra.rotation.x=-Math.PI/2; chakra.position.set(0,0.032,0); g.add(chakra);
   scene.add(g);})();
 /* faint particle field for depth */
