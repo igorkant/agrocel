@@ -354,6 +354,10 @@ function makeChakraTex(){const c=document.createElement('canvas');c.width=c.heig
     x.moveTo(cx+Math.cos(a)*26,cy+Math.sin(a)*26);x.lineTo(cx+Math.cos(a)*196,cy+Math.sin(a)*196);x.stroke();}
   const t=new T.CanvasTexture(c);return t;}
 const CHAKRA_TEX=makeChakraTex();
+function makeShadowTex(){const c=document.createElement('canvas');c.width=c.height=128;const x=c.getContext('2d');
+  const g=x.createRadialGradient(64,64,4,64,64,64);g.addColorStop(0,'rgba(30,34,40,0.55)');g.addColorStop(0.6,'rgba(30,34,40,0.28)');g.addColorStop(1,'rgba(30,34,40,0)');
+  x.fillStyle=g;x.fillRect(0,0,128,128);const t=new T.CanvasTexture(c);return t;}
+const SHADOW_TEX=makeShadowTex();
 function flowTex(){const cv=document.createElement('canvas');cv.width=256;cv.height=16;const x=cv.getContext('2d');
   x.fillStyle='rgba(255,255,255,0.05)';x.fillRect(0,0,256,16);
   for(let i=0;i<10;i++){const cx=i*26+8;const g=x.createLinearGradient(cx-13,0,cx+13,0);g.addColorStop(0,'rgba(255,255,255,0)');g.addColorStop(0.5,'rgba(255,255,255,1)');g.addColorStop(1,'rgba(255,255,255,0)');x.fillStyle=g;x.fillRect(cx-13,0,26,16);}
@@ -593,7 +597,13 @@ function column(name,info){const g=new T.Group();
   const ring=cyl(0.44,0.44,0.05,28,M.steelM);ring.position.y=0.03;g.add(ring);
   {const halo=new T.Mesh(new T.RingGeometry(0.46,0.7,40),new T.MeshBasicMaterial({color:IND.navy,transparent:true,opacity:0.12,side:T.DoubleSide}));halo.rotation.x=-Math.PI/2;halo.position.y=0.02;g.add(halo);}
   for(let a=0;a<3;a++){const ang=a*Math.PI*2/3+0.4;const lg=box(0.06,y0,0.06,M.dark);lg.position.set(Math.cos(ang)*0.3,y0/2,Math.sin(ang)*0.3);g.add(lg);}
-  const shellMat=new T.MeshStandardMaterial({color:0xf5f5f0,roughness:0.5,metalness:0.12,side:T.DoubleSide,envMapIntensity:0.8});
+  const _plMat=new T.MeshStandardMaterial({color:0x3a3f45,metalness:0.6,roughness:0.5,envMapIntensity:0.9});
+  const plinth=cyl(0.42,0.46,0.5,36,_plMat);plinth.position.y=0.25;plinth.castShadow=true;plinth.receiveShadow=true;g.add(plinth);
+  const _rimMat=new T.MeshStandardMaterial({color:0x1e2226,metalness:0.5,roughness:0.6});
+  const plRim=new T.Mesh(new T.TorusGeometry(0.42,0.022,10,40),_rimMat);plRim.rotation.x=Math.PI/2;plRim.position.y=0.5;g.add(plRim);
+  const csh=new T.Mesh(new T.CircleGeometry(0.72,40),new T.MeshBasicMaterial({map:SHADOW_TEX,transparent:true,opacity:0.9,depthWrite:false}));
+  csh.rotation.x=-Math.PI/2;csh.position.y=0.014;csh.renderOrder=0;g.add(csh);
+  const shellMat=new T.MeshStandardMaterial({color:0xe6e9ec,roughness:0.3,metalness:0.28,side:T.DoubleSide,envMapIntensity:1.15});/* india: lower rough + higher metal/env → specular edge falloff separates adjacent column barrels (critic last-10%) */
   const shell=cyl(R,R,H,48,shellMat,{open:true,ts:cs,tl:cl});shell.position.y=y0+H/2;g.add(shell);
   {const jb=new T.Mesh(new T.CylinderGeometry(R+0.006,R+0.006,0.16,48,1,true), new T.MeshStandardMaterial({map:JAALI_TEX,transparent:true,opacity:0.5,roughness:0.6,metalness:0.2,side:T.DoubleSide}));
    jb.material.map.repeat.set(6,1); jb.position.y=top-0.28; g.add(jb);}
