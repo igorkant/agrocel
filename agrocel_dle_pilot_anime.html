@@ -891,7 +891,7 @@ function kioskUpdate(dt){
   ctrl.tT+=dt*0.12;ctrl.tP+=(0.98-ctrl.tP)*0.02;
 }
 const ORDER=['sorption','wash','desorb'];const clock=new T.Clock();let uiTick=0;const tmpC=new T.Color();
-let _fpsAcc=0,_fpsN=0;function fpsWatch(dt){if(!FX)return;_fpsAcc+=dt;_fpsN++;if(_fpsAcc>=2.5){const fps=_fpsN/_fpsAcc;_fpsAcc=0;_fpsN=0;if(fps<40){FX=false;/* sustained low FPS -> drop post-processing to recover */}}}
+let _fpsAcc=0,_fpsN=0,_prCut=false;function fpsWatch(dt){if(_prCut)return;_fpsAcc+=dt;_fpsN++;if(_fpsAcc>=2.5){const fps=_fpsN/_fpsAcc;_fpsAcc=0;_fpsN=0;if(fps<40){_prCut=true;/* sustained low FPS -> drop RESOLUTION once (halves fragment load on hi-DPI) but KEEP the composer + cel outline; never disable FX, the outline IS the anime look */try{renderer.setPixelRatio(1);renderer.setSize(innerWidth,innerHeight);if(composer){composer.setPixelRatio(1);composer.setSize(innerWidth,innerHeight);}}catch(_){}}}}
 function animate(){requestAnimationFrame(animate);const dt=Math.min(clock.getDelta(),0.05);
   if(state.autoRot&&!RM)ctrl.tT+=dt*0.16;
   if(state.cycle){state.cycT+=dt;const step=state.mode==='desorb'?16:8;if(state.cycT>step){state.cycT=0;setMode(ORDER[(ORDER.indexOf(state.mode)+1)%3]);}}
