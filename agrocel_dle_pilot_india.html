@@ -244,7 +244,7 @@ const IND={ saffron:0xff9933, green:0x138808, navyE:0x1a3ad6, navy:0x000080, whi
   mode:{sorption:0xff9933, wash:0x1a3ad6, desorb:0x138808} };
 
 const app=document.getElementById('app');
-const scene=new T.Scene();scene.fog=new T.Fog(0xbcc3c8,210,520);
+const scene=new T.Scene();scene.fog=new T.Fog(0x080d13,90,240);/* india: dark-blue fog borrowed from the Dead-sea original (sky/atmosphere gamma) */
 const camera=new T.PerspectiveCamera(45,innerWidth/innerHeight,0.1,600);
 const renderer=new T.WebGLRenderer({antialias:true});
 renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.setSize(innerWidth,innerHeight);
@@ -286,8 +286,9 @@ function buildFX(){
 buildFX();
 
 (function(){const S=512;const cv=document.createElement('canvas');cv.width=S;cv.height=S;const ctx=cv.getContext('2d');
-  const lin=ctx.createLinearGradient(0,0,0,S);lin.addColorStop(0,'#e6e9ec');lin.addColorStop(0.48,'#d6dbe0');lin.addColorStop(0.62,'#c2c9cf');lin.addColorStop(1,'#b2bac1');ctx.fillStyle=lin;ctx.fillRect(0,0,S,S);
-  const rad=ctx.createRadialGradient(S*0.5,S*0.40,S*0.04,S*0.5,S*0.5,S*0.75);rad.addColorStop(0,'rgba(255,255,255,0.6)');rad.addColorStop(0.55,'rgba(255,255,255,0)');rad.addColorStop(1,'rgba(96,108,116,0.4)');ctx.fillStyle=rad;ctx.fillRect(0,0,S,S);
+  /* india: sky gamma borrowed from the Dead-sea original — dark blue-graphite */
+  const lin=ctx.createLinearGradient(0,0,0,S);lin.addColorStop(0,'#16222e');lin.addColorStop(0.48,'#0e1620');lin.addColorStop(0.62,'#0a1017');lin.addColorStop(1,'#070b10');ctx.fillStyle=lin;ctx.fillRect(0,0,S,S);
+  const rad=ctx.createRadialGradient(S*0.5,S*0.40,S*0.04,S*0.5,S*0.5,S*0.75);rad.addColorStop(0,'rgba(200,218,235,0.10)');rad.addColorStop(0.55,'rgba(200,218,235,0)');rad.addColorStop(1,'rgba(7,11,16,0.55)');ctx.fillStyle=rad;ctx.fillRect(0,0,S,S);
   scene.background=new T.CanvasTexture(cv);})();
 (function(){const W=1024,H=512;const cv=document.createElement('canvas');cv.width=W;cv.height=H;const ctx=cv.getContext('2d');
   /* bright neutral studio dome: white above -> soft grey floor */
@@ -411,9 +412,9 @@ drawPlate();
 const brandPlateMat=new T.MeshBasicMaterial({map:plateTex,transparent:true,depthWrite:false,side:T.FrontSide});
 
 (function(){const g=new T.Group();
-  const _fc=document.createElement('canvas');_fc.width=_fc.height=512;{const fx=_fc.getContext('2d');const fg=fx.createRadialGradient(256,256,20,256,256,250);fg.addColorStop(0,'#464c55');fg.addColorStop(0.55,'#333941');fg.addColorStop(1,'#1e2228');fx.fillStyle=fg;fx.fillRect(0,0,512,512);}/* india: DARK polished floor (was ivory) — light/steel equipment now pops against it */
+  const _fc=document.createElement('canvas');_fc.width=_fc.height=512;{const fx=_fc.getContext('2d');const fg=fx.createRadialGradient(256,256,20,256,256,250);fg.addColorStop(0,'#222d36');fg.addColorStop(0.55,'#161d26');fg.addColorStop(1,'#10171e');fx.fillStyle=fg;fx.fillRect(0,0,512,512);}/* india: floor gamma borrowed from the Dead-sea original — dark blue-graphite (#10171e / pad #222d36) */
   const floorTex=new T.CanvasTexture(_fc);floorTex.encoding=T.sRGBEncoding;
-  const sand=new T.Mesh(new T.PlaneGeometry(160,160),new T.MeshStandardMaterial({color:0xffffff,map:floorTex,roughness:0.34,metalness:0.22,envMapIntensity:0.5}));sand.rotation.x=-Math.PI/2;sand.receiveShadow=true;g.add(sand);
+  const sand=new T.Mesh(new T.PlaneGeometry(160,160),new T.MeshStandardMaterial({color:0xffffff,map:floorTex,roughness:0.9,metalness:0.05,envMapIntensity:0.22}));sand.rotation.x=-Math.PI/2;sand.receiveShadow=true;g.add(sand);/* india: matte dark floor like the Dead-sea original (was polished) */
   const grid=new T.GridHelper(160,80,0x9aa6ab,0xbcc4c9);grid.position.y=0.015;grid.material.transparent=true;grid.material.opacity=0.12;g.add(grid);
   const grid2=new T.GridHelper(42,21,0x9aa7b0,0xc3c9ce);grid2.position.y=0.02;grid2.material.transparent=true;grid2.material.opacity=0.16;g.add(grid2);
   /* concentric energy rings on the pad */
